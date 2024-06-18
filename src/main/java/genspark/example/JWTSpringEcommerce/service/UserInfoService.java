@@ -31,6 +31,17 @@ public class UserInfoService implements UserDetailsService {
     }
 
     public String addUser(UserInfo userInfo) {
+        // Check if a user with the same name already exists
+        Optional<UserInfo> existingUserByName = repository.findByName(userInfo.getName());
+        if (existingUserByName.isPresent()) {
+            return "Username already exists";
+        }
+
+        // Check if a user with the same email already exists
+        Optional<UserInfo> existingUserByEmail = repository.findByEmail(userInfo.getEmail());
+        if (existingUserByEmail.isPresent()) {
+            return "Email already exists";
+        }
         userInfo.setPassword(encoder.encode(userInfo.getPassword()));
         repository.save(userInfo);
         return "User Added Successfully";

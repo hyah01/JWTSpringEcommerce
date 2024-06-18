@@ -129,7 +129,7 @@ public class ProductServiceImpl implements ProductService{
             Optional<UserInfo> curUser = userInfoRepository.findByName(curUserName);
             if (curUser.isPresent()){
                 UserInfo user = curUser.get();
-                if (user.getRoles().equals("ADMIN") || product.getSeller().equals(curUserName)){
+                if (user.getRoles().equals("ROLE_ADMIN") || product.getSeller().equals(curUserName)){
                     // Only allow user to edit title, content, tag and nothing else
                     product.setName(productUpdate.getName());
                     product.setDescription(productUpdate.getDescription());
@@ -155,7 +155,7 @@ public class ProductServiceImpl implements ProductService{
         if (curUser.isPresent()){
             UserInfo user = curUser.get();
             // Admin can also delete it too
-            if (user.getRoles().equals("ADMIN") || product.getName().equals(curUserName)){
+            if (user.getRoles().equals("ROLE_ADMIN") || product.getSeller().equals(curUserName)){
                 this.productDao.deleteById(id);
                 return "Product Deleted Successfully";
             } else {
